@@ -1,0 +1,25 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool, specifically when used with LiteIDE
+*.out
+
+# Go workspace file
+go.work
+go.sum
+
+# AWS secrets and config files in production
+# Comment this out when you want to commit a template version
+secrets.go
+
+# Generated images
+*.jpg
+*.png
+*.jpeg
