@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SubVision Overlay</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Hidden connection status for debugging -->
+    <div class="connection-status" id="connectionStatus" style="display: none;">
+        <span class="status-indicator" id="statusIndicator"></span>
+        <span id="statusText">Connecting...</span>
+    </div>
+
+    <!-- Event overlay container - only visible when events are shown -->
+    <div class="overlay-container" id="overlayContainer">
+        <div class="event-display" id="eventDisplay">
+            <!-- Event content will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
