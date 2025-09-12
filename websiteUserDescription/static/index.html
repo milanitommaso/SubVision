@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Description Manager</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>User Description Manager</h1>
+            <p>Manage and validate your user description</p>
+        </header>
+
+        <!-- User ID Input Section -->
+        <div id="userIdSection" class="section">
+            <h2>Enter Your User ID</h2>
+            <div class="input-group">
+                <input type="text" id="userIdInput" placeholder="Enter your user ID" required>
+                <button id="loadUserBtn" onclick="loadUserData()">Load My Data</button>
+            </div>
+        </div>
+
+        <!-- User Data Display Section -->
+        <div id="userDataSection" class="section" style="display: none;">
+            <h2>Current User Information</h2>
+            <div class="user-info">
+                <p><strong>User ID:</strong> <span id="displayUserId"></span></p>
+                <p><strong>Current Description:</strong></p>
+                <div id="currentDescription" class="description-display"></div>
+                <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
+            </div>
+        </div>
+
+        <!-- Description Form Section -->
+        <div id="descriptionSection" class="section" style="display: none;">
+            <h2>Update Your Description</h2>
+            <form id="descriptionForm">
+                <div class="form-group">
+                    <label for="descriptionInput">New Description:</label>
+                    <textarea 
+                        id="descriptionInput" 
+                        placeholder="Enter your new description here..." 
+                        rows="4" 
+                        required
+                        minlength="10"
+                    ></textarea>
+                    <div class="char-count">
+                        <span id="charCount">0</span> characters (minimum 10)
+                    </div>
+                </div>
+                <button type="submit" id="submitBtn">
+                    <span id="submitText">Submit Description</span>
+                    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                </button>
+            </form>
+        </div>
+
+        <!-- Result Section -->
+        <div id="resultSection" class="section" style="display: none;">
+            <div id="resultMessage" class="result-message"></div>
+        </div>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
