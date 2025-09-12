@@ -65,17 +65,18 @@ func GenerateImage(prompt string, username string) (string, error) {
 	}
 
 	// Create output directory if it doesn't exist
-	outputDir := "output_images"
+	outputDir := "../websiteOverlay/output_images"
 	if err := os.MkdirAll(outputDir, 0755); err != nil {
 		return "", fmt.Errorf("failed to create output directory: %w", err)
 	}
 
 	// Generate unique filename using timestamp
 	timestamp := time.Now().Format("20060102_150405")
-	filename := filepath.Join(outputDir, fmt.Sprintf("img_%s_%s.png", username, timestamp))
+	filename := fmt.Sprintf("img_%s_%s.png", username, timestamp)
+	path := filepath.Join(outputDir, filename)
 
 	// Save image to file
-	if err := os.WriteFile(filename, imageBytes, 0644); err != nil {
+	if err := os.WriteFile(path, imageBytes, 0644); err != nil {
 		return "", fmt.Errorf("failed to save image to file: %w", err)
 	}
 
