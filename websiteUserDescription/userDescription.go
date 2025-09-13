@@ -21,7 +21,7 @@ type UserDescriptionItem struct {
 }
 
 // getUserDescription retrieves user description from DynamoDB
-func getUserDescription(userID string) UserDataResponse {
+func getUserDescription(userID string) UserDescriptionResponse {
 	log.Printf("Getting description for user ID: %s", userID)
 
 	// Get AWS configuration
@@ -39,7 +39,7 @@ func getUserDescription(userID string) UserDataResponse {
 	if err != nil {
 		log.Printf("Error creating AWS session: %v", err)
 		// Return mock data as fallback
-		return UserDataResponse{
+		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "Unable to retrieve description from database. Please try again later.",
 			LastUpdated: time.Now().Format("2006-01-02 15:04:05"),
@@ -64,7 +64,7 @@ func getUserDescription(userID string) UserDataResponse {
 	if err != nil {
 		log.Printf("Error getting item from DynamoDB: %v", err)
 		// Return mock data as fallback
-		return UserDataResponse{
+		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "Unable to retrieve description from database. Please try again later.",
 			LastUpdated: time.Now().Format("2006-01-02 15:04:05"),
@@ -75,7 +75,7 @@ func getUserDescription(userID string) UserDataResponse {
 	if result.Item == nil {
 		log.Printf("No description found for user ID: %s", userID)
 		// Return empty description for new users
-		return UserDataResponse{
+		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "No description found. Please add your first description below.",
 			LastUpdated: "Never",
@@ -88,7 +88,7 @@ func getUserDescription(userID string) UserDataResponse {
 	if err != nil {
 		log.Printf("Error unmarshaling DynamoDB item: %v", err)
 		// Return mock data as fallback
-		return UserDataResponse{
+		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "Error reading description from database. Please try again later.",
 			LastUpdated: time.Now().Format("2006-01-02 15:04:05"),
@@ -96,7 +96,7 @@ func getUserDescription(userID string) UserDataResponse {
 	}
 
 	log.Printf("Successfully retrieved description for user ID: %s", userID)
-	return UserDataResponse(item)
+	return UserDescriptionResponse(item)
 }
 
 // storeUserDescription saves user description to DynamoDB

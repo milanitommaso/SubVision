@@ -1,11 +1,7 @@
-// Global variables
-let currentUserId = '';
-
 // DOM elements
-const userIdInput = document.getElementById('userIdInput');
-const loadUserBtn = document.getElementById('loadUserBtn');
+const usernameSection = document.getElementById('usernameSection');
 const userDataSection = document.getElementById('userDataSection');
-const descriptionSection = document.getElementById('descriptionSection');
+const descriptionFormSection = document.getElementById('descriptionFormSection');
 const resultSection = document.getElementById('resultSection');
 const descriptionForm = document.getElementById('descriptionForm');
 const descriptionInput = document.getElementById('descriptionInput');
@@ -14,77 +10,74 @@ const submitText = document.getElementById('submitText');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const charCount = document.getElementById('charCount');
 
-// Initialize the application
-document.addEventListener('DOMContentLoaded', function() {
-    // Add event listeners
-    userIdInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            loadUserData();
-        }
-    });
 
+window.addEventListener('load', async function () {
+    await Clerk.load()
+    if (Clerk.isSignedIn) {
+        document.getElementById('authSection').innerHTML = `
+            <div id="user-button"></div>
+        `
+
+        document.getElementById('usernameSection').innerHTML = `
+            <h2>Username</h2>
+            <p id="displayUsername">${Clerk.user.firstName || ''}</p>
+        `
+
+        const userButtonDiv = document.getElementById('user-button')
+        Clerk.mountUserButton(userButtonDiv)
+
+        loadUserData()
+        showLoggedInSections()
+    } else {
+        document.getElementById('authSection').innerHTML = `
+            <div id="sign-in"></div>
+        `
+
+        const signInDiv = document.getElementById('sign-in')
+
+        Clerk.mountSignIn(signInDiv)
+    }
+})
+
+document.addEventListener('DOMContentLoaded', function() {
     descriptionInput.addEventListener('input', updateCharCount);
     descriptionForm.addEventListener('submit', handleFormSubmit);
-
-    // Focus on user ID input
-    userIdInput.focus();
 });
 
 // Load user data from the server
 async function loadUserData() {
-    const userId = userIdInput.value.trim();
-    
-    if (!userId) {
-        showError('Please enter a valid User ID');
-        return;
-    }
-
-    // Show loading state
-    loadUserBtn.disabled = true;
-    loadUserBtn.innerHTML = '<div class="spinner"></div> Loading...';
-
     try {
-        const response = await fetch(`/api/user-data?userId=${encodeURIComponent(userId)}`);
-        
+        const response = await fetch('/api/user-data', {
+            headers: {
+                Authorization: `Bearer ${await Clerk.session.getToken()}`,
+            },
+        });
+
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const userData = await response.json();
-        
-        // Store current user ID
-        currentUserId = userId;
-        
         // Display user data
         displayUserData(userData);
-        
-        // Show the form sections
-        showSections();
-        
     } catch (error) {
         console.error('Error loading user data:', error);
         showError('Failed to load user data. Please try again.');
-    } finally {
-        // Reset button state
-        loadUserBtn.disabled = false;
-        loadUserBtn.innerHTML = 'Load My Data';
     }
 }
 
 // Display user data in the UI
 function displayUserData(userData) {
-    document.getElementById('displayUserId').textContent = userData.userId;
+    document.getElementById('displayUsername').textContent = userData.username;
     document.getElementById('currentDescription').textContent = userData.description;
     document.getElementById('lastUpdated').textContent = userData.lastUpdated;
 }
 
-// Show the user data and form sections
-function showSections() {
+// Show username, user description and form sections
+function showLoggedInSections() {
+    usernameSection.style.display = 'block';
     userDataSection.style.display = 'block';
-    descriptionSection.style.display = 'block';
-    
-    // Scroll to the form section
-    descriptionSection.scrollIntoView({ behavior: 'smooth' });
+    descriptionFormSection.style.display = 'block';
 }
 
 // Handle form submission
@@ -111,10 +104,9 @@ async function handleFormSubmit(e) {
         const response = await fetch('/api/submit-description', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                Authorization: `Bearer ${await Clerk.session.getToken()}`,
             },
             body: JSON.stringify({
-                userId: currentUserId,
                 description: description
             })
         });
@@ -131,8 +123,8 @@ async function handleFormSubmit(e) {
         // If successful, reload user data to show updated information
         if (result.success && result.valid) {
             setTimeout(() => {
-                loadUserDataSilently();
-            }, 1000);
+                loadUserData();
+            }, 500);
         }
         
     } catch (error) {
@@ -141,20 +133,6 @@ async function handleFormSubmit(e) {
     } finally {
         // Reset button state
         setSubmitButtonLoading(false);
-    }
-}
-
-// Load user data silently (without showing loading states)
-async function loadUserDataSilently() {
-    try {
-        const response = await fetch(`/api/user-data?userId=${encodeURIComponent(currentUserId)}`);
-        
-        if (response.ok) {
-            const userData = await response.json();
-            displayUserData(userData);
-        }
-    } catch (error) {
-        console.error('Error reloading user data:', error);
     }
 }
 
@@ -243,28 +221,6 @@ function showError(message) {
 function hideResult() {
     resultSection.style.display = 'none';
 }
-
-// Utility function to show info message
-function showInfo(message) {
-    const resultMessage = document.getElementById('resultMessage');
-    
-    resultMessage.className = 'result-message info';
-    resultMessage.innerHTML = `
-        <h3>ℹ️ Information</h3>
-        <p>${message}</p>
-    `;
-    
-    resultSection.style.display = 'block';
-    resultSection.scrollIntoView({ behavior: 'smooth' });
-}
-
-// Handle Enter key in description textarea (Ctrl+Enter to submit)
-descriptionInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && e.ctrlKey) {
-        e.preventDefault();
-        handleFormSubmit(e);
-    }
-});
 
 // Add some visual feedback for form validation
 descriptionInput.addEventListener('blur', function() {

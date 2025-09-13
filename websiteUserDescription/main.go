@@ -5,38 +5,65 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+
+	"websiteUserDescription/config"
+
+	"github.com/clerk/clerk-sdk-go/v2"
+	clerkhttp "github.com/clerk/clerk-sdk-go/v2/http"
+	"github.com/clerk/clerk-sdk-go/v2/user"
 )
 
-type DescriptionRequest struct {
-	UserID      string `json:"userId"`
+type SetUserDescriptionRequest struct {
 	Description string `json:"description"`
 }
 
-type DescriptionResponse struct {
+type SetUserDescriptionResponse struct {
 	Success bool   `json:"success"`
 	Message string `json:"message"`
 	Valid   bool   `json:"valid"`
 }
 
-type UserDataResponse struct {
+type UserDescriptionResponse struct {
 	UserID      string `json:"userId"`
 	Description string `json:"description"`
 	LastUpdated string `json:"lastUpdated"`
 }
 
+type GetUserDataResponse struct {
+    UserID      string `json:"userId"`
+    Username    string `json:"username"`
+	Description string `json:"description"`
+	LastUpdated string `json:"lastUpdated"`
+}
+
 func main() {
+	// Initialize Clerk client
+	clerkSecrets := config.GetClerkSecrets()
+	clerk.SetKey(clerkSecrets.SecretKey)
+
+	mux := http.NewServeMux()
+
 	// Serve static files
-	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
-	
+	mux.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static/"))))
+
 	// Serve the main page
-	http.HandleFunc("/", serveHomePage)
-	
+	mux.HandleFunc("/", serveHomePage)
+
 	// API endpoints
-	http.HandleFunc("/api/user-data", getUserData)
-	http.HandleFunc("/api/submit-description", submitDescription)
+	getUserDataHandler := http.HandlerFunc(getUserData)
+	mux.Handle(
+		"/api/user-data",
+		clerkhttp.WithHeaderAuthorization()(getUserDataHandler),
+	)
+
+    submitDescriptionHandler := http.HandlerFunc(submitDescription)
+    mux.Handle(
+        "/api/submit-description",
+        clerkhttp.WithHeaderAuthorization()(submitDescriptionHandler),
+    )
 	
 	fmt.Println("Server starting on :8080")
-	log.Fatal(http.ListenAndServe(":8080", nil))
+	log.Fatal(http.ListenAndServe(":8080", mux))
 }
 
 func serveHomePage(w http.ResponseWriter, r *http.Request) {
@@ -48,18 +75,33 @@ func getUserData(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
-	
-	userID := r.URL.Query().Get("userId")
-	if userID == "" {
-		http.Error(w, "User ID is required", http.StatusBadRequest)
+
+	claims, ok := clerk.SessionClaimsFromContext(r.Context())
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"access": "unauthorized"}`))
 		return
 	}
-	
-	// For now, return mock data - in the future this will call getUserDescription()
-	userData := getUserDescription(userID)
-	
+
+	usr, err := user.Get(r.Context(), claims.Subject)
+	if err != nil {
+		// handle the error
+	}
+
+	var username string = *usr.ExternalAccounts[0].Username
+	var twitchUserId string = usr.ExternalAccounts[0].ProviderUserID
+
+	userData := getUserDescription(twitchUserId)
+
+    userDataWithUsername := GetUserDataResponse{
+        UserID:      userData.UserID,
+        Username:    username,
+        Description: userData.Description,
+        LastUpdated: userData.LastUpdated,
+    }
+    
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(userData)
+	json.NewEncoder(w).Encode(userDataWithUsername)
 }
 
 func submitDescription(w http.ResponseWriter, r *http.Request) {
@@ -68,39 +110,53 @@ func submitDescription(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	var req DescriptionRequest
+	var req SetUserDescriptionRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)
 		return
 	}
-	
-	if req.UserID == "" || req.Description == "" {
-		http.Error(w, "User ID and description are required", http.StatusBadRequest)
+
+	if req.Description == "" {
+		http.Error(w, "Description is required", http.StatusBadRequest)
 		return
 	}
 	
+    claims, ok := clerk.SessionClaimsFromContext(r.Context())
+	if !ok {
+		w.WriteHeader(http.StatusUnauthorized)
+		w.Write([]byte(`{"access": "unauthorized"}`))
+		return
+	}
+
+	usr, err := user.Get(r.Context(), claims.Subject)
+	if err != nil {
+		// handle the error
+	}
+
+	var twitchUserId string = usr.ExternalAccounts[0].ProviderUserID
+
 	// Check description with LLM (placeholder for now)
 	isValid := checkDescriptionWithLLM(req.Description)
 	
-	var response DescriptionResponse
+	var response SetUserDescriptionResponse
 	if isValid {
 		// Store in database (placeholder for now)
-		success := storeUserDescription(req.UserID, req.Description)
+		success := storeUserDescription(twitchUserId, req.Description)
 		if success {
-			response = DescriptionResponse{
+			response = SetUserDescriptionResponse{
 				Success: true,
 				Message: "Description accepted and saved successfully!",
 				Valid:   true,
 			}
 		} else {
-			response = DescriptionResponse{
+			response = SetUserDescriptionResponse{
 				Success: false,
 				Message: "Description was accepted but failed to save. Please try again.",
 				Valid:   true,
 			}
 		}
 	} else {
-		response = DescriptionResponse{
+		response = SetUserDescriptionResponse{
 			Success: false,
 			Message: "Description was rejected by our validation system. Please provide a more appropriate description.",
 			Valid:   false,

@@ -13,28 +13,28 @@
             <p>Manage and validate your user description</p>
         </header>
 
-        <!-- User ID Input Section -->
-        <div id="userIdSection" class="section">
-            <h2>Enter Your User ID</h2>
-            <div class="input-group">
-                <input type="text" id="userIdInput" placeholder="Enter your user ID" required>
-                <button id="loadUserBtn" onclick="loadUserData()">Load My Data</button>
-            </div>
+        <!-- username section -->
+        <div id="usernameSection" class="section" style="display: none;">
+            <h2>Username</h2>
+            <p id="displayUsername"></p>
+        </div>
+
+        <!-- User Authentication Section -->
+        <div id="authSection" class="section">
+            <h2>User Authentication</h2>
+            <div id="app"></div>
         </div>
 
         <!-- User Data Display Section -->
         <div id="userDataSection" class="section" style="display: none;">
             <h2>Current User Information</h2>
-            <div class="user-info">
-                <p><strong>User ID:</strong> <span id="displayUserId"></span></p>
-                <p><strong>Current Description:</strong></p>
-                <div id="currentDescription" class="description-display"></div>
-                <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
-            </div>
+            <p><strong>Current Description:</strong></p>
+            <div id="currentDescription"></div>
+            <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
         </div>
 
         <!-- Description Form Section -->
-        <div id="descriptionSection" class="section" style="display: none;">
+        <div id="descriptionFormSection" class="section" style="display: none;">
             <h2>Update Your Description</h2>
             <form id="descriptionForm">
                 <div class="form-group">
@@ -64,5 +64,13 @@
     </div>
 
     <script src="/static/app.js"></script>
+
+    <script
+        async
+        crossorigin="anonymous"
+        data-clerk-publishable-key="pk_test_dHJ1c3R5LW9yY2EtNzEuY2xlcmsuYWNjb3VudHMuZGV2JA"
+        src="https://trusty-orca-71.clerk.accounts.dev/npm/@clerk/clerk-js@5/dist/clerk.browser.js"
+        type="text/javascript"
+    ></script>
 </body>
 </html>
