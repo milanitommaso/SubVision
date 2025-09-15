@@ -42,7 +42,7 @@ func getUserDescription(userID string) UserDescriptionResponse {
 		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "Unable to retrieve description from database. Please try again later.",
-			LastUpdated: time.Now().Format("2006-01-02 15:04:05"),
+			LastUpdated: time.Unix(0, 0).Format("2006-01-02 15:04:05"),
 		}
 	}
 
@@ -67,7 +67,7 @@ func getUserDescription(userID string) UserDescriptionResponse {
 		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "Unable to retrieve description from database. Please try again later.",
-			LastUpdated: time.Now().Format("2006-01-02 15:04:05"),
+			LastUpdated: time.Unix(0, 0).Format("2006-01-02 15:04:05"),
 		}
 	}
 
@@ -91,7 +91,7 @@ func getUserDescription(userID string) UserDescriptionResponse {
 		return UserDescriptionResponse{
 			UserID:      userID,
 			Description: "Error reading description from database. Please try again later.",
-			LastUpdated: time.Now().Format("2006-01-02 15:04:05"),
+			LastUpdated: time.Unix(0, 0).Format("2006-01-02 15:04:05"),
 		}
 	}
 
@@ -152,4 +152,10 @@ func storeUserDescription(userID, description string) bool {
 
 	log.Printf("Successfully stored description for user ID: %s", userID)
 	return true
+}
+
+// getLastUpdated retrieves the last updated timestamp for a user
+func getLastUpdated(userID string) string {
+	userData := getUserDescription(userID)
+	return userData.LastUpdated
 }

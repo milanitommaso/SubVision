@@ -189,7 +189,6 @@ function showResult(result) {
         resultMessage.innerHTML = `
             <h3>❌ Description Rejected</h3>
             <p>${result.message}</p>
-            <p><small>Please modify your description and try again.</small></p>
         `;
         
     } else {

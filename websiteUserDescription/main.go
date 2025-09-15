@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"websiteUserDescription/config"
 
@@ -135,10 +136,25 @@ func submitDescription(w http.ResponseWriter, r *http.Request) {
 
 	var twitchUserId string = usr.ExternalAccounts[0].ProviderUserID
 
+	var response SetUserDescriptionResponse
+
+	// check that description was not submitted too recently, if it was updated less than 10 seconds ago, reject
+	lastUpdated := getLastUpdated(twitchUserId)
+	parsedTime, err := time.ParseInLocation("2006-01-02 15:04:05", lastUpdated, time.Local)
+	if err == nil && time.Since(parsedTime).Seconds() < 10 {
+		response = SetUserDescriptionResponse{
+			Success: false,
+			Message: "You can only update your description once every 10 seconds. Please wait a moment and try again.",
+			Valid:   false,
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+	
 	// Check description with LLM (placeholder for now)
 	isValid := checkDescriptionWithLLM(req.Description)
-	
-	var response SetUserDescriptionResponse
 	if isValid {
 		// Store in database (placeholder for now)
 		success := storeUserDescription(twitchUserId, req.Description)
