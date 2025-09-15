@@ -4,13 +4,16 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"fmt"
+	"image/jpeg"
+	"image/png"
 	"log"
 	"os"
 	"path/filepath"
 	"time"
-	
+
 	"genImage/config"
 
 	"google.golang.org/genai"
@@ -22,12 +25,12 @@ func GenerateImage(prompt string, username string) (string, error) {
 	googleAPISecrets := config.GetGoogleAPISecrets()
 
 	ctx := context.Background()
-	
+
 	// Create Gemini client
 	client, err := genai.NewClient(ctx, &genai.ClientConfig{
-        APIKey:  googleAPISecrets.APIKey,
-        Backend: genai.BackendGeminiAPI,
-    })
+		APIKey:  googleAPISecrets.APIKey,
+		Backend: genai.BackendGeminiAPI,
+	})
 	if err != nil {
 		return "", fmt.Errorf("failed to create Gemini client: %w", err)
 	}
@@ -70,14 +73,28 @@ func GenerateImage(prompt string, username string) (string, error) {
 		return "", fmt.Errorf("failed to create output directory: %w", err)
 	}
 
+	// Decode PNG from bytes
+	img, err := png.Decode(bytes.NewReader(imageBytes))
+	if err != nil {
+		return "", fmt.Errorf("failed to decode PNG image: %w", err)
+	}
+
 	// Generate unique filename using timestamp
 	timestamp := time.Now().Format("20060102_150405")
-	filename := fmt.Sprintf("img_%s_%s.png", username, timestamp)
+	filename := fmt.Sprintf("img_%s_%s.jpg", username, timestamp)
 	path := filepath.Join(outputDir, filename)
 
-	// Save image to file
-	if err := os.WriteFile(path, imageBytes, 0644); err != nil {
-		return "", fmt.Errorf("failed to save image to file: %w", err)
+	// Create file for JPEG output
+	file, err := os.Create(path)
+	if err != nil {
+		return "", fmt.Errorf("failed to create JPEG file: %w", err)
+	}
+	defer file.Close()
+
+	// Encode as JPEG (quality 60 for efficiency)
+	opt := &jpeg.Options{Quality: 60}
+	if err := jpeg.Encode(file, img, opt); err != nil {
+		return "", fmt.Errorf("failed to encode JPEG: %w", err)
 	}
 
 	return filename, nil
