@@ -138,6 +138,19 @@ func submitDescription(w http.ResponseWriter, r *http.Request) {
 
 	var response SetUserDescriptionResponse
 
+	// check that description length is within limits
+	if len(req.Description) < 10 || len(req.Description) > 1000 {
+		response = SetUserDescriptionResponse{
+			Success: false,
+			Message: "Description must be between 10 and 1000 characters.",
+			Valid:   false,
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(response)
+		return
+	}
+
 	// check that description was not submitted too recently, if it was updated less than 10 seconds ago, reject
 	lastUpdated := getLastUpdated(twitchUserId)
 	parsedTime, err := time.ParseInLocation("2006-01-02 15:04:05", lastUpdated, time.Local)
