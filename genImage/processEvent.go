@@ -117,17 +117,26 @@ func processMessage(sqsClient *sqs.SQS, message *sqs.Message, awsSecrets config.
 		return
 	}
 
+	deleteParams := &sqs.DeleteMessageInput{
+		QueueUrl:      aws.String(awsSecrets.SubsToProcessSqsQueueURL),
+		ReceiptHandle: message.ReceiptHandle,
+	}
+
 	// Return if there is no user description
 	if userDescription == "" {
 		log.Printf("No description found for user ID: %d", payload.UserID)
-		moveMessageToDLQ(sqsClient, message, awsSecrets, "No user description found")
+
+		_, err = sqsClient.DeleteMessage(deleteParams)
+		if err != nil {
+			log.Printf("Error deleting message: %v", err)
+		}
+
 		return
 	}
 
 	prompt := createPrompt(userDescription)
 
 	// Generate image by calling the GenerateImage module
-	log.Printf("Generating image for user ID: %d with prompt: %s", payload.UserID, prompt)
 	imagePath, err := GenerateImage(prompt, payload.Username)
 	if err != nil {
 		log.Printf("Failed to generate image: %v", err)
@@ -146,11 +155,6 @@ func processMessage(sqsClient *sqs.SQS, message *sqs.Message, awsSecrets config.
 	}
 
 	// Delete message from the queue after successful processing
-	deleteParams := &sqs.DeleteMessageInput{
-		QueueUrl:      aws.String(awsSecrets.SubsToProcessSqsQueueURL),
-		ReceiptHandle: message.ReceiptHandle,
-	}
-
 	_, err = sqsClient.DeleteMessage(deleteParams)
 	if err != nil {
 		log.Printf("Error deleting message: %v", err)

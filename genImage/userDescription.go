@@ -70,7 +70,7 @@ func GetUserDescription(userID int) (string, error) {
 	// Check if item was found
 	if result.Item == nil {
 		log.Printf("No description found for user ID: %d", userID)
-		return "", fmt.Errorf("no description found for user ID: %d", userID)
+		return "", nil
 	}
 
 	// Unmarshal the result into our struct
