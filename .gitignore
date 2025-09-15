@@ -19,8 +19,10 @@ go.sum
 # AWS secrets and config files in production
 # Comment this out when you want to commit a template version
 secrets.go
+credentials.*
 
-# Generated images
+# Generated images and events log
 *.jpg
 *.png
 *.jpeg
+events.txt
