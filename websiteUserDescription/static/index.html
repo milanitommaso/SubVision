@@ -3,64 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Description Manager</title>
+    <title>SubVision - AI Description Manager</title>
     <link rel="stylesheet" href="/static/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>User Description Manager</h1>
-            <p>Manage and validate your user description</p>
+        <!-- Header Section -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo-section">
+                    <h1 class="logo">SubVision</h1>
+                </div>
+                <div id="userButtonContainer" class="user-button-container" style="display: none;">
+                    <div id="userButton"></div>
+                </div>
+            </div>
         </header>
 
-        <!-- username section -->
-        <div id="usernameSection" class="section" style="display: none;">
-            <h2>Username</h2>
-            <p id="displayUsername"></p>
-        </div>
+        <!-- Features Section -->
+        <section class="features-section">
+            <div class="features-content">
+                <h2 class="features-title">SubVision User Description</h2>
+                <div class="feature-card">
+                    <div class="feature-icon">👨‍💼</div>
+                    <h3>Write a description of yourself</h3>
+                    <p>Write a description of yourself describing your face, your body and any particular characteristics</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Show a generated image of yourself</h3>
+                    <p>Everytime you subscribe to enkk channel, a photo of you will appear on stream</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📲</div>
+                    <h3>Coming soon: send generated image to discord</h3>
+                    <p>send generated image to discord</p>
+                </div>
+            </div>
+        </section>
 
-        <!-- User Authentication Section -->
-        <div id="authSection" class="section">
-            <h2>User Authentication</h2>
-            <div id="app"></div>
-        </div>
+        <!-- Login Section -->
+        <section id="loginSection" class="login-section">
+            <div class="login-content">
+                <h2>Welcome to SubVision</h2>
+                <p>Sign in to manage your AI-validated descriptions</p>
+                <div id="signInContainer" class="sign-in-container">
+                    <div id="sign-in"></div>
+                </div>
+            </div>
+        </section>
 
-        <!-- User Data Display Section -->
-        <div id="userDataSection" class="section" style="display: none;">
-            <h2>Current User Information</h2>
-            <p><strong>Current Description:</strong></p>
-            <div id="currentDescription"></div>
-            <p><strong>Last Updated:</strong> <span id="lastUpdated"></span></p>
-        </div>
-
-        <!-- Description Form Section -->
-        <div id="descriptionFormSection" class="section" style="display: none;">
-            <h2>Update Your Description</h2>
-            <form id="descriptionForm">
-                <div class="form-group">
-                    <label for="descriptionInput">New Description:</label>
-                    <textarea 
-                        id="descriptionInput" 
-                        placeholder="Enter your new description here..." 
-                        rows="4" 
-                        required
-                        minlength="10"
-                    ></textarea>
-                    <div class="char-count">
-                        <span id="charCount">0</span> characters (minimum 10)
+        <!-- User Data Section -->
+        <section id="userDataSection" class="user-data-section" style="display: none;">
+            <div class="section-content">
+                <h2 class="section-title">Your Profile</h2>
+                <div class="user-info-card">
+                    <div class="info-row">
+                        <span class="info-label">Username</span>
+                        <span id="displayUsername" class="info-value"></span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Current Description</span>
+                        <div id="currentDescription" class="description-display"></div>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Last Updated</span>
+                        <span id="lastUpdated" class="info-value"></span>
                     </div>
                 </div>
-                <button type="submit" id="submitBtn">
-                    <span id="submitText">Submit Description</span>
-                    <div id="loadingSpinner" class="spinner" style="display: none;"></div>
-                </button>
-            </form>
-        </div>
+            </div>
+        </section>
+
+        <!-- Description Form Section -->
+        <section id="descriptionFormSection" class="form-section" style="display: none;">
+            <div class="section-content">
+                <h2 class="section-title">Update Your Description</h2>
+                <div class="form-card">
+                    <form id="descriptionForm">
+                        <div class="form-group">
+                            <label for="descriptionInput" class="form-label">New Description</label>
+                            <textarea 
+                                id="descriptionInput" 
+                                class="form-textarea"
+                                placeholder="Enter your new description here..." 
+                                rows="4" 
+                                required
+                                minlength="10"
+                            ></textarea>
+                            <div class="char-count">
+                                <span id="charCount">0</span> characters (minimum 10)
+                            </div>
+                        </div>
+                        <button type="submit" id="submitBtn" class="submit-btn">
+                            <span id="submitText">Submit Description</span>
+                            <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
 
         <!-- Result Section -->
-        <div id="resultSection" class="section" style="display: none;">
-            <div id="resultMessage" class="result-message"></div>
-        </div>
+        <section id="resultSection" class="result-section" style="display: none;">
+            <div class="section-content">
+                <div id="resultMessage" class="result-message"></div>
+            </div>
+        </section>
     </div>
 
     <script src="/static/app.js"></script>

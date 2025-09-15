@@ -1,3 +1,28 @@
+:root {
+    --bg-primary: #0a0a0b;
+    --bg-secondary: #111115;
+    --bg-tertiary: #1a1a1f;
+    --bg-card: #1e1e24;
+    --bg-input: #2a2a32;
+    --bg-clerk: #2d2d35;
+    --bg-clerk-light: #353540;
+    --text-primary: #ffffff;
+    --text-secondary: #b3b3b3;
+    --text-muted: #8b8b8b;
+    --accent-primary: #6366f1;
+    --accent-secondary: #8b5cf6;
+    --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --border: #2a2a32;
+    --border-light: #3a3a42;
+    --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+    --border-radius: 12px;
+    --border-radius-lg: 16px;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -5,172 +30,365 @@
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: var(--text-primary);
+    background: var(--bg-primary);
     min-height: 100vh;
     padding: 20px;
+    background-image: 
+        radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
 }
 
 .container {
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
-    background: white;
-    border-radius: 15px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Header Styles */
+.header {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(10px);
+    position: relative;
     overflow: hidden;
 }
 
-header {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    text-align: center;
-    padding: 40px 20px;
+.header::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--accent-gradient);
 }
 
-header h1 {
+.header-content {
+    padding: 40px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.logo-section {
+    flex: 1;
+}
+
+.logo {
     font-size: 2.5rem;
-    margin-bottom: 10px;
-    font-weight: 300;
+    font-weight: 700;
+    background: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
 }
 
-header p {
+.tagline {
     font-size: 1.1rem;
-    opacity: 0.9;
-}
-
-.section {
-    padding: 30px;
-    border-bottom: 1px solid #eee;
-}
-
-.section:last-child {
-    border-bottom: none;
-}
-
-.section h2 {
-    color: #2c3e50;
-    margin-bottom: 20px;
-    font-size: 1.5rem;
+    color: var(--text-secondary);
     font-weight: 400;
 }
 
-.input-group {
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-.input-group input {
-    flex: 1;
-    min-width: 200px;
-    padding: 12px 16px;
-    border: 2px solid #e1e8ed;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.input-group input:focus {
-    outline: none;
-    border-color: #4facfe;
-    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
-}
-
-button {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.3s ease;
+.user-button-container {
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-height: 48px;
 }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(79, 172, 254, 0.3);
+/* Features Section */
+.features-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    position: relative;
 }
 
-button:active {
-    transform: translateY(0);
+.features-content {
+    padding: 10px 30px 10px 30px;
 }
 
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none;
+.features-title {
+    text-align: center;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
 }
 
-.user-info {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    border-left: 4px solid #4facfe;
+.feature-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: 5px 25px 25px 25px;
+    margin-bottom: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.user-info p {
+.feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-gradient);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--accent-primary);
+}
+
+.feature-card:hover::before {
+    transform: scaleX(1);
+}
+
+.feature-icon {
+    font-size: 2.5rem;
+    display: block;
+}
+
+.feature-card h3 {
+    font-size: 1.2rem;
+    font-weight: 600;
     margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.feature-card p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+/* Section Styles */
+.login-section,
+.user-data-section,
+.form-section,
+.result-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--border-radius-lg);
+    margin-bottom: 30px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+}
+
+.section-content {
+    padding: 15px 30px 20px 30px;
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-primary);
+}
+
+/* Login Section */
+.login-content {
+    text-align: center;
+    padding: 40px 30px;
+}
+
+.login-content h2 {
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: var(--text-primary);
+}
+
+.login-content p {
+    color: var(--text-secondary);
+    margin-bottom: 30px;
+}
+
+.sign-in-container {
+    display: flex;
+    justify-content: center;
+}
+
+/* User Info Card */
+.user-info-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: 25px;
+}
+
+.info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 20px;
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-label {
+    font-weight: 500;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+    min-width: 120px;
+}
+
+.info-value {
+    color: var(--text-primary);
+    text-align: right;
+    flex: 1;
 }
 
 .description-display {
-    background: white;
+    background: var(--bg-input);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
     padding: 15px;
-    border-radius: 6px;
-    border: 1px solid #e1e8ed;
-    margin: 10px 0;
+    color: var(--text-primary);
     font-style: italic;
-    color: #555;
+    line-height: 1.5;
+    min-height: 60px;
+    flex: 1;
+    text-align: left;
+}
+
+/* Form Styles */
+.form-card {
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-light);
+    border-radius: var(--border-radius);
+    padding: 30px;
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 25px;
 }
 
-.form-group label {
+.form-label {
     display: block;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     font-weight: 500;
-    color: #2c3e50;
+    color: var(--text-primary);
+    font-size: 0.95rem;
 }
 
-textarea {
+.form-textarea {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid #e1e8ed;
-    border-radius: 8px;
+    padding: 15px;
+    background: var(--bg-input);
+    border: 2px solid var(--border);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
     font-size: 1rem;
     font-family: inherit;
     resize: vertical;
     min-height: 120px;
     transition: all 0.3s ease;
+    line-height: 1.5;
 }
 
-textarea:focus {
+.form-textarea::placeholder {
+    color: var(--text-muted);
+}
+
+.form-textarea:focus {
     outline: none;
-    border-color: #4facfe;
-    box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: var(--bg-secondary);
 }
 
 .char-count {
     text-align: right;
-    font-size: 0.9rem;
-    color: #666;
-    margin-top: 5px;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 8px;
+    transition: color 0.3s ease;
 }
 
+/* Button Styles */
+.submit-btn {
+    background: var(--accent-gradient);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 50px;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.submit-btn:hover::before {
+    left: 100%;
+}
+
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.submit-btn:disabled:hover::before {
+    left: -100%;
+}
+
+/* Spinner */
 .spinner {
     width: 20px;
     height: 20px;
     border: 2px solid transparent;
-    border-top: 2px solid white;
+    border-top: 2px solid currentColor;
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
@@ -180,85 +398,466 @@ textarea:focus {
     100% { transform: rotate(360deg); }
 }
 
+/* Result Messages */
 .result-message {
-    padding: 20px;
-    border-radius: 8px;
+    padding: 25px;
+    border-radius: var(--border-radius);
     font-weight: 500;
     text-align: center;
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+}
+
+.result-message::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: currentColor;
 }
 
 .result-message.success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 .result-message.error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+    border-color: rgba(239, 68, 68, 0.2);
 }
 
 .result-message.info {
-    background: #d1ecf1;
-    color: #0c5460;
-    border: 1px solid #bee5eb;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--accent-primary);
+    border-color: rgba(99, 102, 241, 0.2);
 }
 
-/* Loading states */
-.loading {
-    opacity: 0.7;
-    pointer-events: none;
+.result-message h3 {
+    margin-bottom: 10px;
+    font-size: 1.1rem;
 }
 
-/* Responsive design */
-@media (max-width: 600px) {
+.result-message p {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.result-message small {
+    opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    .header-content {
+        padding: 30px 20px;
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .logo {
+        font-size: 2rem;
+    }
+    
+    .features-content,
+    .section-content,
+    .login-content {
+        padding: 30px 20px;
+    }
+    
+    .form-card,
+    .user-info-card {
+        padding: 20px;
+    }
+    
+    .info-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .info-value {
+        text-align: left;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0;
+    }
+    
     body {
         padding: 10px;
     }
     
-    .container {
-        border-radius: 10px;
+    .logo {
+        font-size: 1.8rem;
     }
     
-    header {
-        padding: 30px 20px;
+    .features-title {
+        font-size: 1.5rem;
     }
     
-    header h1 {
-        font-size: 2rem;
-    }
-    
-    .section {
-        padding: 20px;
-    }
-    
-    .input-group {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .input-group input {
-        min-width: auto;
-    }
-    
-    button {
-        justify-content: center;
+    .section-title {
+        font-size: 1.3rem;
     }
 }
 
-/* Animation for section transitions */
-.section {
-    animation: fadeIn 0.5s ease-in;
-}
-
-@keyframes fadeIn {
+/* Animations */
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(30px);
     }
     to {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+.login-section,
+.user-data-section,
+.form-section,
+.result-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.features-section {
+    animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+.header {
+    animation: fadeInUp 0.6s ease-out 0.2s both;
+}
+
+/* Clerk component customization */
+.cl-userButtonAvatarBox {
+    width: 40px !important;
+    height: 40px !important;
+}
+
+/* User Button Popover */
+.cl-userButtonPopoverCard {
+    background: var(--bg-clerk) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.cl-userButtonPopoverMain {
+    background: var(--bg-clerk) !important;
+}
+
+.cl-userButtonPopoverActions {
+    background: var(--bg-clerk-light) !important;
+}
+
+.cl-userButtonPopoverActionButton {
+    background: transparent !important;
+    color: var(--text-primary) !important;
+    border: none !important;
+}
+
+.cl-userButtonPopoverActionButton:hover {
+    background: var(--bg-input) !important;
+    color: var(--text-primary) !important;
+}
+
+.cl-userButtonPopoverActionButtonText {
+    color: var(--text-primary) !important;
+}
+
+.cl-userButtonPopoverActionButtonIcon {
+    color: var(--text-secondary) !important;
+}
+
+/* Sign In Component */
+.cl-card {
+    background: var(--bg-clerk) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow) !important;
+}
+
+.cl-main {
+    background: var(--bg-clerk) !important;
+}
+
+.cl-rootBox {
+    background: var(--bg-clerk) !important;
+}
+
+.cl-headerTitle,
+.cl-headerSubtitle,
+.cl-formFieldLabel,
+.cl-footerActionText,
+.cl-socialButtonsBlockButtonText,
+.cl-dividerText,
+.cl-alternativeMethodsBlockButtonText,
+.cl-identityPreviewText,
+.cl-userPreviewTextContainer {
+    color: var(--text-primary) !important;
+}
+
+.cl-headerSubtitle {
+    color: var(--text-secondary) !important;
+}
+
+/* Form Elements */
+.cl-formFieldInput {
+    background: var(--bg-clerk-light) !important;
+    border: 2px solid var(--border-light) !important;
+    color: var(--text-primary) !important;
+}
+
+.cl-formFieldInput:focus {
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1) !important;
+}
+
+.cl-formFieldInput::placeholder {
+    color: var(--text-muted) !important;
+}
+
+/* Buttons */
+.cl-formButtonPrimary {
+    background: var(--accent-gradient) !important;
+    color: white !important;
+    border: none !important;
+}
+
+.cl-formButtonPrimary:hover {
+    background: var(--accent-gradient) !important;
+    opacity: 0.9 !important;
+}
+
+.cl-socialButtonsBlockButton {
+    background: var(--bg-clerk-light) !important;
+    border: 1px solid var(--border-light) !important;
+    color: var(--text-primary) !important;
+}
+
+.cl-socialButtonsBlockButton:hover {
+    background: var(--bg-input) !important;
+    border-color: var(--accent-primary) !important;
+}
+
+.cl-socialButtonsBlockButtonText {
+    color: var(--text-primary) !important;
+}
+
+.cl-socialButtonsBlockButtonArrow {
+    color: var(--text-secondary) !important;
+}
+
+/* Footer and Links */
+.cl-footerActionLink {
+    color: var(--accent-primary) !important;
+}
+
+.cl-footerActionLink:hover {
+    color: var(--accent-secondary) !important;
+}
+
+/* Alternative Methods */
+.cl-alternativeMethodsBlockButton {
+    background: var(--bg-clerk-light) !important;
+    border: 1px solid var(--border-light) !important;
+    color: var(--text-primary) !important;
+}
+
+.cl-alternativeMethodsBlockButton:hover {
+    background: var(--bg-input) !important;
+    border-color: var(--accent-primary) !important;
+}
+
+/* Dividers */
+.cl-dividerLine {
+    background: var(--border) !important;
+}
+
+/* Form Field Error States */
+.cl-formFieldInputShowPasswordButton {
+    color: var(--text-secondary) !important;
+}
+
+.cl-formFieldInputShowPasswordButton:hover {
+    color: var(--text-primary) !important;
+}
+
+/* Loading States */
+.cl-spinner {
+    color: var(--accent-primary) !important;
+}
+
+/* Success/Error Messages */
+.cl-formFieldSuccessText {
+    color: var(--success) !important;
+}
+
+.cl-formFieldErrorText {
+    color: var(--error) !important;
+}
+
+/* Provider Icons */
+.cl-socialButtonsBlockButtonIcon {
+    filter: none !important;
+}
+
+/* Specific provider icon adjustments */
+.cl-socialButtonsBlockButton[data-provider="github"] .cl-socialButtonsBlockButtonIcon {
+    filter: brightness(0) invert(1) !important;
+}
+
+/* User Preview */
+.cl-userPreviewMainIdentifier {
+    color: var(--text-primary) !important;
+}
+
+.cl-userPreviewSecondaryIdentifier {
+    color: var(--text-secondary) !important;
+}
+
+/* Breadcrumbs */
+.cl-breadcrumbsItem {
+    color: var(--text-secondary) !important;
+}
+
+.cl-breadcrumbsItemCurrent {
+    color: var(--text-primary) !important;
+}
+
+/* Loading Spinner */
+.cl-loadingSpinner {
+    color: var(--accent-primary) !important;
+}
+
+/* Clerk Internal Components */
+.cl-internal-b3fm6y {
+    background: var(--bg-card) !important;
+}
+
+[data-clerk-theme] {
+    --cl-color-primary: var(--accent-primary) !important;
+    --cl-color-danger: var(--error) !important;
+    --cl-color-success: var(--success) !important;
+    --cl-color-warning: var(--warning) !important;
+    --cl-color-neutral-50: var(--bg-primary) !important;
+    --cl-color-neutral-100: var(--bg-secondary) !important;
+    --cl-color-neutral-200: var(--bg-tertiary) !important;
+    --cl-color-neutral-300: var(--bg-card) !important;
+    --cl-color-neutral-400: var(--border) !important;
+    --cl-color-neutral-500: var(--border-light) !important;
+    --cl-color-neutral-600: var(--text-muted) !important;
+    --cl-color-neutral-700: var(--text-secondary) !important;
+    --cl-color-neutral-800: var(--text-primary) !important;
+    --cl-color-neutral-900: var(--text-primary) !important;
+}
+
+/* Additional global overrides for any missed components */
+.cl-modal,
+.cl-modalContent,
+.cl-card,
+.cl-cardBox,
+.cl-socialButtonsContainer,
+.cl-formContainer,
+.cl-headerBox,
+.cl-main,
+.cl-footer {
+    background: var(--bg-clerk) !important;
+    color: var(--text-primary) !important;
+}
+
+/* Fix for social login buttons with provider icons */
+.cl-socialButtonsBlockButton svg,
+.cl-socialButtonsBlockButton img {
+    filter: none !important;
+}
+
+/* Specific icon fixes for different providers */
+.cl-socialButtonsBlockButton[data-provider="google"] svg,
+.cl-socialButtonsBlockButton[data-provider="google"] img {
+    filter: none !important;
+}
+
+.cl-socialButtonsBlockButton[data-provider="github"] svg,
+.cl-socialButtonsBlockButton[data-provider="github"] img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.cl-socialButtonsBlockButton[data-provider="discord"] svg,
+.cl-socialButtonsBlockButton[data-provider="discord"] img {
+    filter: none !important;
+}
+
+.cl-socialButtonsBlockButton[data-provider="twitch"] svg,
+.cl-socialButtonsBlockButton[data-provider="twitch"] img {
+    filter: none !important;
+}
+
+/* Fix for any text elements that might still be using light theme */
+.cl-formFieldLabel,
+.cl-formFieldLabelRow,
+.cl-formFieldOptionalText,
+.cl-formFieldHintText,
+.cl-identityPreviewEditButton,
+.cl-userButtonPopoverFooter,
+.cl-menuList,
+.cl-menuItem,
+.cl-notificationBadge {
+    color: var(--text-primary) !important;
+    background: transparent !important;
+}
+
+/* Specific fixes for social login buttons */
+.cl-socialButtonsBlockButton[data-provider="twitch"],
+.cl-socialButtonsBlockButton[data-provider="google"],
+.cl-socialButtonsBlockButton[data-provider="discord"],
+.cl-socialButtonsBlockButton[data-provider="github"] {
+    background: var(--bg-clerk-light) !important;
+    border: 1px solid var(--border-light) !important;
+    color: var(--text-primary) !important;
+}
+
+.cl-socialButtonsBlockButton[data-provider="twitch"] .cl-socialButtonsBlockButtonText,
+.cl-socialButtonsBlockButton[data-provider="google"] .cl-socialButtonsBlockButtonText,
+.cl-socialButtonsBlockButton[data-provider="discord"] .cl-socialButtonsBlockButtonText,
+.cl-socialButtonsBlockButton[data-provider="github"] .cl-socialButtonsBlockButtonText {
+    color: var(--text-primary) !important;
+}
+
+/* Force all Clerk components to use dark theme */
+.cl-component,
+.cl-component *,
+[class*="cl-"] {
+    background-color: var(--bg-clerk) !important;
+}
+
+/* Ensure all text in Clerk components is visible */
+.cl-component *,
+[class*="cl-"] {
+    color: var(--text-primary) !important;
+}
+
+/* Override any remaining white/light backgrounds */
+.cl-component [style*="background-color: white"],
+.cl-component [style*="background-color: #fff"],
+.cl-component [style*="background-color: #ffffff"],
+.cl-component [style*="background: white"],
+.cl-component [style*="background: #fff"],
+.cl-component [style*="background: #ffffff"] {
+    background-color: var(--bg-clerk) !important;
+}
+
+/* Override any black text on potential dark backgrounds */
+.cl-component [style*="color: black"],
+.cl-component [style*="color: #000"],
+.cl-component [style*="color: #000000"] {
+    color: var(--text-primary) !important;
 }

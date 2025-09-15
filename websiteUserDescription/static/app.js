@@ -1,5 +1,5 @@
 // DOM elements
-const usernameSection = document.getElementById('usernameSection');
+const loginSection = document.getElementById('loginSection');
 const userDataSection = document.getElementById('userDataSection');
 const descriptionFormSection = document.getElementById('descriptionFormSection');
 const resultSection = document.getElementById('resultSection');
@@ -9,33 +9,28 @@ const submitBtn = document.getElementById('submitBtn');
 const submitText = document.getElementById('submitText');
 const loadingSpinner = document.getElementById('loadingSpinner');
 const charCount = document.getElementById('charCount');
+const userButtonContainer = document.getElementById('userButtonContainer');
 
 
 window.addEventListener('load', async function () {
     await Clerk.load()
     if (Clerk.isSignedIn) {
-        document.getElementById('authSection').innerHTML = `
-            <div id="user-button"></div>
-        `
+        // Show user button in header
+        const userButtonDiv = document.getElementById('userButton');
+        Clerk.mountUserButton(userButtonDiv);
+        userButtonContainer.style.display = 'flex';
 
-        document.getElementById('usernameSection').innerHTML = `
-            <h2>Username</h2>
-            <p id="displayUsername">${Clerk.user.firstName || ''}</p>
-        `
-
-        const userButtonDiv = document.getElementById('user-button')
-        Clerk.mountUserButton(userButtonDiv)
-
-        loadUserData()
-        showLoggedInSections()
+        // Hide login section and show user sections
+        loginSection.style.display = 'none';
+        loadUserData();
+        showLoggedInSections();
     } else {
-        document.getElementById('authSection').innerHTML = `
-            <div id="sign-in"></div>
-        `
-
-        const signInDiv = document.getElementById('sign-in')
-
-        Clerk.mountSignIn(signInDiv)
+        // Hide user button and show login section
+        userButtonContainer.style.display = 'none';
+        loginSection.style.display = 'block';
+        
+        const signInDiv = document.getElementById('sign-in');
+        Clerk.mountSignIn(signInDiv);
     }
 })
 
@@ -70,12 +65,21 @@ async function loadUserData() {
 function displayUserData(userData) {
     document.getElementById('displayUsername').textContent = userData.username;
     document.getElementById('currentDescription').textContent = userData.description;
-    document.getElementById('lastUpdated').textContent = userData.lastUpdated;
+    
+    try {
+        const formattedDate = new Date(userData.lastUpdated).toLocaleString("IT-it");
+        document.getElementById('lastUpdated').textContent = formattedDate;
+        if (formattedDate === "Invalid Date") {
+            document.getElementById('lastUpdated').textContent = userData.lastUpdated;
+        }
+    } catch (e) {
+        console.error('Error formatting date:', e);
+        document.getElementById('lastUpdated').textContent = userData.lastUpdated;
+    }
 }
 
 // Show username, user description and form sections
 function showLoggedInSections() {
-    usernameSection.style.display = 'block';
     userDataSection.style.display = 'block';
     descriptionFormSection.style.display = 'block';
 }
@@ -156,9 +160,9 @@ function updateCharCount() {
     
     // Change color based on minimum requirement
     if (count < 10) {
-        charCount.style.color = '#e74c3c';
+        charCount.style.color = '#ef4444';
     } else {
-        charCount.style.color = '#27ae60';
+        charCount.style.color = '#10b981';
     }
 }
 
@@ -227,14 +231,14 @@ descriptionInput.addEventListener('blur', function() {
     const description = this.value.trim();
     
     if (description.length > 0 && description.length < 10) {
-        this.style.borderColor = '#e74c3c';
+        this.style.borderColor = '#ef4444';
     } else if (description.length >= 10) {
-        this.style.borderColor = '#27ae60';
+        this.style.borderColor = '#10b981';
     } else {
-        this.style.borderColor = '#e1e8ed';
+        this.style.borderColor = '#2a2a32';
     }
 });
 
 descriptionInput.addEventListener('focus', function() {
-    this.style.borderColor = '#4facfe';
+    this.style.borderColor = '#6366f1';
 });
