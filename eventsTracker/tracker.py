@@ -34,6 +34,11 @@ def log_data(timestamp, username, user_id, type_event, sub_tier, sub_months, qua
 def push_element_to_queue(timestamp, username, user_id, type_event, sub_tier, sub_months, quantity):
     log_data(timestamp, username, user_id, type_event, sub_tier, sub_months, quantity)
 
+    try:
+        user_id = int(user_id)
+    except (ValueError, TypeError):
+        pass
+
     data = {
         "user_id": user_id,
         "username": username,
@@ -99,7 +104,7 @@ def get_data_from_line_privmsg_manual_event(line):
 
 def get_data_from_line_usernotice(line):
     """Get the data from the line of the usernotice event"""
-    timestamp, user_id, username, event_type = None, None, None, None
+    timestamp, user_id, username, event_type, quantity = None, None, None, None, None
 
     sub_months = -1
     sub_tier = ""
@@ -275,7 +280,7 @@ class ListenChatThread(threading.Thread):
                 if "PRIVMSG" in line and "bits=" in line:
                     ts, username, user_id, n_bits = get_data_bits_from_line_privmsg(line)
 
-                    if n_bits > 0 and username is not None:
+                    if n_bits >= 100 and username is not None:
                         push_element_to_queue(ts, username, user_id, "bits", None, None, n_bits)
 
                 if "USERNOTICE" in line:
