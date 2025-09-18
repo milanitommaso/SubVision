@@ -6,7 +6,7 @@ class OverlayMonitor {
         this.reconnectDelay = 1000;
         this.maxReconnectDelay = 30000; // Cap at 30 seconds
         this.eventDisplayTimeout = null;
-        this.eventDisplayDuration = 5000; // 5 seconds default
+        this.eventDisplayDuration = 10000; // 10 seconds default
         this.isDisplayingEvent = false; // Track if an event is currently being displayed
         this.eventQueue = []; // Queue for incoming events
         this.heartbeatInterval = null;
