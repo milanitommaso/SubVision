@@ -11,6 +11,7 @@ require (
 	cloud.google.com/go v0.116.0 // indirect
 	cloud.google.com/go/compute/metadata v0.5.0 // indirect
 	github.com/google/go-cmp v0.6.0 // indirect
+	github.com/google/uuid v1.6.0
 	github.com/gorilla/websocket v1.5.3 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	golang.org/x/image v0.31.0 // indirect
