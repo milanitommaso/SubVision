@@ -65,13 +65,37 @@ func GenerateImage(prompt string, username string) (string, error) {
 	// Prepare request payload
 	uuid := uuid.New()
 	payload := []map[string]interface{}{
-		{
-			"taskType":       "imageInference",
-			"taskUUID":       uuid,
-			"positivePrompt": prompt,
-			"model":          randomModel,
-			"numberResults":  1,
-		},
+			{
+				"taskType":       "imageInference",
+				"taskUUID":       uuid,
+				"positivePrompt": prompt,
+				"model":          randomModel,
+				"numberResults":  1,
+			},
+		}
+
+	if randomModel == "google:4@1" {
+		payload = []map[string]interface{}{
+			{
+				"taskType":       "imageInference",
+				"taskUUID":       uuid,
+				"positivePrompt": prompt,
+				"model":          randomModel,
+				"numberResults":  1,
+			},
+		}
+	} else {
+		payload = []map[string]interface{}{
+			{
+				"taskType":       "imageInference",
+				"taskUUID":       uuid,
+				"positivePrompt": prompt,
+				"model":          randomModel,
+				"numberResults":  1,
+				"width":          1024,
+				"height":         1024,
+			},
+		}
 	}
 
 	payloadBytes, err := json.Marshal(payload)
