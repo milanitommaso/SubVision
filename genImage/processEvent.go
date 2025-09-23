@@ -160,13 +160,8 @@ func processMessage(sqsClient *sqs.SQS, message *sqs.Message, awsSecrets config.
 		log.Printf("Error deleting message: %v", err)
 	}
 
-	// Send image to Discord (this would call your sendImageDiscord module)
-	// err = SendImageToDiscord(imagePath)
-	// if err != nil {
-	//     log.Printf("Failed to send image to Discord: %v", err)
-	//     send message to telegram
-	//     return
-	// }
+	// Send image to Discord (asynchronous, non-blocking)
+	go SendImageToDiscord(imagePath, payload.Username)
 
 	// For now, we'll just log that we would process this message
 	log.Printf("Would process message for UserID: %d", payload.UserID)
